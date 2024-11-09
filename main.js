@@ -1,12 +1,14 @@
-const input = document.querySelector('#string-input');
+const firstNameInput = document.querySelector('#first-name-input');
+// const lastNameInput = document.querySelector('#last-name-input');
 const submitButton = document.querySelector('.submit-input');
 const inputList = document.querySelector('.input-list-dynamic');
 const errorMessage = document.querySelector('.hidden');
-input.placeholder = "Please enter an item";
+firstNameInput.placeholder = "Please enter first name";
+// lastNameInput.placeholder = "Please enter last name";
 
 
-input.addEventListener('input', () => {
-    if (/\d/.test(input.value)) {
+firstNameInput.addEventListener('input', () => {
+    if (/\d/.test(firstNameInput.value)) {
         errorMessage.style.display = "inline-block"
         submitButton.disabled = true;
     } else {
@@ -15,18 +17,32 @@ input.addEventListener('input', () => {
     }
 });
 
-input.addEventListener("keypress", function(event) {
-    if (event.key === 'Enter') {
-        appendNewItem();
+// input.addEventListener("keypress", function(event) {
+//     if (event.key === 'Enter') {
+//         appendNewItem();
+//     }
+// });
+
+function assignFormNamesToObject() {
+    const form = document.querySelector('.form-input');
+    const formData = new FormData(form);
+    const namesObj = {};
+
+    for (const [key, value] of formData.entries()) {
+        namesObj[key] = value;
     }
-});
+
+    return Object.values(namesObj);
+}
 
 function appendNewItem() {
-    const newString = input.value.trim(); 
-    if (newString) {
+    const firstName = firstNameInput.value.trim(); 
+    // const lastName = firstNameInput.value.trim(); 
+    if (firstName) {
         const listItem = document.createElement('li');
         listItem.setAttribute('class', 'list-item');
-        listItem.textContent = newString;
+        listItem.textContent = assignFormNamesToObject();
+        console.log(listItem);
         listItem.appendChild(createEditButton());
         listItem.appendChild(createRemoveButton());
         
@@ -34,7 +50,10 @@ function appendNewItem() {
     } else {
         alert("Enter valid item");
     }
-    input.value = '';
+
+    
+    firstNameInput.value = '';
+    console.log("firstNameInput cleared");
 }
 
 function createRemoveButton() {
@@ -55,11 +74,11 @@ function createEditButton() {
     editButton.onclick = (event) => {
         const listItem = event.target.parentNode;
         const currentInput = listItem.firstChild.textContent;
-        input.value = currentInput;
-        submitButton.onclick = (item) => {
-            listItem.firstChild.textContent = input.value.trim();
+        firstNameInput.value = currentInput;
+        submitButton.onclick = () => {
+            listItem.firstChild.textContent = firstNameInput.value.trim();
             submitButton.onclick = appendNewItem;
-            input.value = ''; 
+            firstNameInput.value = ''; 
         }
     }
     return editButton;

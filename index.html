@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Counter Website</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
   </head>
   <body>
     <main>
         <h1 class="title">Input List</h1>  
         <div class="upper"> 
-            <input type="text" id="string-input">
-            <button class="submit-input" onclick="appendNewItem()">Submit</button>
+            <form class="form-input">
+              <label for="first-name-input">First Name:</label>
+              <input type="text" id="first-name-input" name="first name">
+              <!-- <label for="last-name-input"> Last Name:</label>
+              <input type="text" id="last-name-input" name="last name"> -->
+              <button class="submit-input" onclick="appendNewItem()">Submit</button>
+            </form>
         </div>
         <div class="hidden">
           <p class="error-msg">Error: Do not include digits</p>
