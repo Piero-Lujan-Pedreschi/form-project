@@ -1,14 +1,14 @@
 const firstNameInput = document.querySelector('#first-name-input');
-// const lastNameInput = document.querySelector('#last-name-input');
+const lastNameInput = document.querySelector('#last-name-input');
 const submitButton = document.querySelector('.submit-input');
 const inputList = document.querySelector('.input-list-dynamic');
 const errorMessage = document.querySelector('.hidden');
 firstNameInput.placeholder = "Please enter first name";
-// lastNameInput.placeholder = "Please enter last name";
+lastNameInput.placeholder = "Please enter last name";
 
 
 firstNameInput.addEventListener('input', () => {
-    if (/\d/.test(firstNameInput.value)) {
+    if (/\d/.test(firstNameInput.value) && /\d/.test(lastNameInput.value)) {
         errorMessage.style.display = "inline-block"
         submitButton.disabled = true;
     } else {
@@ -32,31 +32,35 @@ function assignFormNamesToObject() {
         namesObj[key] = value;
     }
 
-    return Object.values(namesObj);
+    return namesObj;
 }
 
 function appendNewItem() {
     const firstName = firstNameInput.value.trim(); 
-    // const lastName = firstNameInput.value.trim(); 
-    if (firstName) {
+    const lastName = firstNameInput.value.trim();
+    const fullName = assignFormNamesToObject();
+    localStorage.setItem("fullName", JSON.stringify(fullName));
+    const storedFullName = JSON.parse(localStorage.getItem("fullName"));
+    console.log(storedFullName);
+
+    if (firstName && lastName) {
         const listItem = document.createElement('li');
         listItem.setAttribute('class', 'list-item');
-        listItem.textContent = assignFormNamesToObject();
+        listItem.textContent = Object.values(fullName);
         console.log(listItem);
-        listItem.appendChild(createEditButton());
-        listItem.appendChild(createRemoveButton());
+        listItem.appendChild(createEditButton(storedFullName));
+        listItem.appendChild(createRemoveButton(storedFullName));
         
         inputList.appendChild(listItem);
     } else {
         alert("Enter valid item");
     }
-
     
     firstNameInput.value = '';
-    console.log("firstNameInput cleared");
+    lastNameInput.value = '';
 }
 
-function createRemoveButton() {
+function createRemoveButton(storedObject) {
     const removeButton = document.createElement('button');
     removeButton.setAttribute('class', 'remove-button');
     removeButton.textContent = "X";
@@ -67,18 +71,22 @@ function createRemoveButton() {
     return removeButton;
 }
 
-function createEditButton() {
+function createEditButton(storedObject) {
     const editButton = document.createElement('button');
     editButton.setAttribute('class', 'edit-button');
     editButton.textContent = "Edit";
     editButton.onclick = (event) => {
         const listItem = event.target.parentNode;
-        const currentInput = listItem.firstChild.textContent;
-        firstNameInput.value = currentInput;
+        firstNameInput.value = storedObject.firstName;
+        lastNameInput.value = storedObject.lastName;
         submitButton.onclick = () => {
-            listItem.firstChild.textContent = firstNameInput.value.trim();
+            storedObject.firstName = firstNameInput.value
+            storedObject.lastName = lastNameInput.value
+            listItem.firstChild.textContent = Object.values(storedObject);
+            console.log(storedObject);
             submitButton.onclick = appendNewItem;
             firstNameInput.value = ''; 
+            lastNameInput.value = '';
         }
     }
     return editButton;
