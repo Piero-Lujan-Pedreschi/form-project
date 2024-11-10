@@ -7,10 +7,9 @@ firstNameInput.placeholder = "Please enter first name";
 lastNameInput.placeholder = "Please enter last name";
 
 const fullNameArray = [];
-// localStorage.setItem("fullNameArray", JSON.stringify(fullNameArray));
+localStorage.setItem("fullNameArray", JSON.stringify(fullNameArray));
 
 function appendNewItem() {
-    localStorage.setItem("fullNameArray", JSON.stringify(fullNameArray));
     console.log(fullNameArray);
     const firstName = firstNameInput.value.trim(); 
     const lastName = firstNameInput.value.trim();
