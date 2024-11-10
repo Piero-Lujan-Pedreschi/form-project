@@ -6,20 +6,18 @@ const errorMessage = document.querySelector('.hidden');
 firstNameInput.placeholder = "Please enter first name";
 lastNameInput.placeholder = "Please enter last name";
 
-const fullNameArray = [];
-localStorage.setItem("fullNameArray", JSON.stringify(fullNameArray));
 
 function appendNewItem() {
-    console.log(fullNameArray);
     const firstName = firstNameInput.value.trim(); 
     const lastName = firstNameInput.value.trim();
     const fullName = assignFormNamesToObject();
-    fullNameArray.push(fullName);
 
     if (firstName && lastName) {
         const listItem = document.createElement('li');
         listItem.setAttribute('class', 'list-item');
         listItem.textContent = Object.values(fullName);
+
+        localStorage.setItem('fullName', JSON.stringify(fullName));
         // listItem.appendChild(createEditButton());
         // listItem.appendChild(createRemoveButton());
         
