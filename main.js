@@ -6,6 +6,8 @@ const errorMessage = document.querySelector('.hidden');
 firstNameInput.placeholder = "Please enter first name";
 lastNameInput.placeholder = "Please enter last name";
 
+const items = [];
+
 
 firstNameInput.addEventListener('input', () => {
     if (/\d/.test(firstNameInput.value) && /\d/.test(lastNameInput.value)) {
@@ -17,11 +19,11 @@ firstNameInput.addEventListener('input', () => {
     }
 });
 
-// input.addEventListener("keypress", function(event) {
-//     if (event.key === 'Enter') {
-//         appendNewItem();
-//     }
-// });
+input.addEventListener("keypress", function(event) {
+    if (event.key === 'Enter') {
+        appendNewItem();
+    }
+});
 
 function assignFormNamesToObject() {
     const form = document.querySelector('.form-input');
