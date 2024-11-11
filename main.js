@@ -8,9 +8,6 @@ lastNameInput.placeholder = "Please enter last name";
 
 const arrayOfFullNames = JSON.parse(localStorage.getItem('arrayOfFullNames')) || [];
 loadListItems();
-console.log(arrayOfFullNames);
-
-// localStorage.clear();
 
 function appendNewItem() {
     const firstName = firstNameInput.value.trim(); 
@@ -18,15 +15,7 @@ function appendNewItem() {
     const fullName = assignFormNamesToObject();
 
     if (checkForm()) {
-        const listItem = document.createElement('li');
-        listItem.setAttribute('class', 'list-item');
-        listItem.textContent = Object.values(fullName).join(' ');
-        arrayOfFullNames.push(fullName);
-        localStorage.setItem('arrayOfFullNames', JSON.stringify(arrayOfFullNames));
-
-        createButtonsInContainer(listItem);
-        
-        inputList.appendChild(listItem);
+        handleNewListItem(fullName);
     } else {
         alert("Enter valid item");
     }
@@ -41,11 +30,9 @@ function createRemoveButton() {
     removeButton.textContent = "X";
     removeButton.onclick = (event) => {
         const listItem = event.target.parentNode.parentNode;
-        console.log(listItem);
         arrayOfFullNames.splice([...listItem.parentNode.children].indexOf(listItem), 1);
         localStorage.setItem('arrayOfFullNames', JSON.stringify(arrayOfFullNames));
         inputList.removeChild(listItem);
-        
     };
     return removeButton;
 }
@@ -63,7 +50,6 @@ function createEditButton() {
             object.firstName = firstNameInput.value
             object.lastName = lastNameInput.value
             localStorage.setItem('arrayOfFullNames', JSON.stringify(arrayOfFullNames));
-            console.log(Object.values(listItem.firstChild)); 
             listItem.firstChild.textContent = Object.values(object).join(' ');
             submitButton.onclick = appendNewItem;
             firstNameInput.value = ''; 
@@ -127,4 +113,14 @@ function createButtonsInContainer(item) {
     buttonContainer.appendChild(createEditButton());
     buttonContainer.appendChild(createRemoveButton());
     item.append(buttonContainer);
+}
+
+function handleNewListItem(object) {
+    const listItem = document.createElement('li');
+    listItem.setAttribute('class', 'list-item');
+    listItem.textContent = Object.values(object).join(' ');
+    arrayOfFullNames.push(object);
+    localStorage.setItem('arrayOfFullNames', JSON.stringify(arrayOfFullNames));
+    createButtonsInContainer(listItem);
+    inputList.appendChild(listItem);
 }
