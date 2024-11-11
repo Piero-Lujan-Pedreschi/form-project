@@ -6,20 +6,25 @@ const errorMessage = document.querySelector('.hidden');
 firstNameInput.placeholder = "Please enter first name";
 lastNameInput.placeholder = "Please enter last name";
 
+const arrayOfFullNames = JSON.parse(localStorage.getItem('arrayOfFullNames')) || [];
+loadListItems();
+console.log(arrayOfFullNames);
+
+// localStorage.clear();
 
 function appendNewItem() {
     const firstName = firstNameInput.value.trim(); 
     const lastName = firstNameInput.value.trim();
     const fullName = assignFormNamesToObject();
 
-    if (firstName && lastName) {
+    if (checkForm()) {
         const listItem = document.createElement('li');
         listItem.setAttribute('class', 'list-item');
-        listItem.textContent = Object.values(fullName);
+        listItem.textContent = Object.values(fullName).join(' ');
+        arrayOfFullNames.push(fullName);
+        localStorage.setItem('arrayOfFullNames', JSON.stringify(arrayOfFullNames));
 
-        localStorage.setItem('fullName', JSON.stringify(fullName));
-        // listItem.appendChild(createEditButton());
-        // listItem.appendChild(createRemoveButton());
+        createButtonsInContainer(listItem);
         
         inputList.appendChild(listItem);
     } else {
@@ -30,39 +35,46 @@ function appendNewItem() {
     lastNameInput.value = '';
 }
 
-// function createRemoveButton(storedObject) {
-//     const removeButton = document.createElement('button');
-//     removeButton.setAttribute('class', 'remove-button');
-//     removeButton.textContent = "X";
-//     removeButton.onclick = (event) => {
-//         const listItem = event.target.parentNode;
-//         inputList.removeChild(listItem);
-//     };
-//     return removeButton;
-// }
+function createRemoveButton() {
+    const removeButton = document.createElement('button');
+    removeButton.setAttribute('class', 'remove-button');
+    removeButton.textContent = "X";
+    removeButton.onclick = (event) => {
+        const listItem = event.target.parentNode.parentNode;
+        console.log(listItem);
+        arrayOfFullNames.splice([...listItem.parentNode.children].indexOf(listItem), 1);
+        localStorage.setItem('arrayOfFullNames', JSON.stringify(arrayOfFullNames));
+        inputList.removeChild(listItem);
+        
+    };
+    return removeButton;
+}
 
-// function createEditButton() {
-//     const editButton = document.createElement('button');
-//     editButton.setAttribute('class', 'edit-button');
-//     editButton.textContent = "Edit";
-//     editButton.onclick = (event) => {
-//         const listItem = event.target.parentNode;
-//         firstNameInput.value = storedObject.firstName;
-//         lastNameInput.value = storedObject.lastName;
-//         submitButton.onclick = () => {
-//             storedObject.firstName = firstNameInput.value
-//             storedObject.lastName = lastNameInput.value
-//             listItem.firstChild.textContent = Object.values(storedObject);
-//             submitButton.onclick = appendNewItem;
-//             firstNameInput.value = ''; 
-//             lastNameInput.value = '';
-//         }
-//     }
-//     return editButton;
-// }
+function createEditButton() {
+    const editButton = document.createElement('button');
+    editButton.setAttribute('class', 'edit-button');
+    editButton.textContent = "Edit";
+    editButton.onclick = (event) => {
+        const listItem = event.target.parentNode.parentNode;
+        const object = arrayOfFullNames[[...listItem.parentNode.children].indexOf(listItem)];     
+        firstNameInput.value = object.firstName;
+        lastNameInput.value = object.lastName;
+        submitButton.onclick = () => {
+            object.firstName = firstNameInput.value
+            object.lastName = lastNameInput.value
+            localStorage.setItem('arrayOfFullNames', JSON.stringify(arrayOfFullNames));
+            console.log(Object.values(listItem.firstChild)); 
+            listItem.firstChild.textContent = Object.values(object).join(' ');
+            submitButton.onclick = appendNewItem;
+            firstNameInput.value = ''; 
+            lastNameInput.value = '';
+        }
+    }
+    return editButton;
+}
 
 firstNameInput.addEventListener('input', () => {
-    if (/\d/.test(firstNameInput.value) && /\d/.test(lastNameInput.value)) {
+    if (/\d/.test(firstNameInput.value) || /\d/.test(lastNameInput.value)) {
         errorMessage.style.display = "inline-block"
         submitButton.disabled = true;
     } else {
@@ -87,4 +99,32 @@ function assignFormNamesToObject() {
     }
 
     return namesObj;
+}
+
+function loadListItems () {
+    for (let i = 0; i < arrayOfFullNames.length; i++) {
+        const listItem = document.createElement('li');
+        listItem.setAttribute('class', 'list-item');
+        listItem.textContent = Object.values(arrayOfFullNames[i]).join(' ');
+        inputList.appendChild(listItem);
+        createButtonsInContainer(listItem);
+    }
+}
+
+function checkForm() {
+    const firstName = firstNameInput.value;
+    const lastName = lastNameInput.value;
+
+    if (firstName === '' || lastName === '') {
+        return false;
+    }
+    return true;
+}
+
+function createButtonsInContainer(item) {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.setAttribute('class', 'button-container');
+    buttonContainer.appendChild(createEditButton());
+    buttonContainer.appendChild(createRemoveButton());
+    item.append(buttonContainer);
 }

@@ -13,11 +13,14 @@
         <h1 class="title">Input List</h1>  
         <div class="upper"> 
             <form class="form-input">
-              <label for="first-name-input">First Name:</label>
-              <input type="text" id="first-name-input" name="firstName">
-              <label for="last-name-input"> Last Name:</label>
-              <input type="text" id="last-name-input" name="lastName">
-              
+              <span class="input-container">
+                <label for="first-name-input">First Name:</label>
+                <input type="text" id="first-name-input" name="firstName" class="name-input">
+              </span>
+              <span class="input-container">
+                <label for="last-name-input"> Last Name:</label>
+                <input type="text" id="last-name-input" name="lastName" class="name-input">
+              </span>          
             </form>
             <button class="submit-input" onclick="appendNewItem()">Submit</button>
         </div>

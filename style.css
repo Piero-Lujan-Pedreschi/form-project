@@ -6,8 +6,12 @@
     display: flex;
     margin: 5rem 35% 0;
     height: auto;
-    align-items: center;
+    align-items: end;
     justify-content: center;
+}
+
+.submit-input {
+    margin-bottom: 5px;
 }
 
 .lower {
@@ -54,4 +58,19 @@ li:hover{
     color: rgb(255, 37, 37);
     margin-top: 0;
     font-size: 12px;
+}
+
+.name-input {
+    display: block;
+    margin: 0 5px 5px;
+}
+
+.name-input {
+    display: block;
+    margin: 0 5px 5px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: end;
 }
